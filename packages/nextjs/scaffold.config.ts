@@ -1,5 +1,29 @@
 import * as chains from "viem/chains";
 
+import { defineChain } from "viem";
+
+/**
+ * Configuración de la red de Metis Sepolia
+ */
+export const metisSepolia = defineChain({
+  id: 59902, // ID de la cadena
+  name: "metisSepolia", // Nombre de la cadena
+  nativeCurrency: { name: "tMetis", symbol: "tMETIS", decimals: 18 }, // Moneda nativa de la cadena
+  rpcUrls: {
+    default: {
+      http: ["https://sepolia.metisdevops.link"], // URL del servidor RPC
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Etherscan", // Nombre del explorador de bloques
+      url: "https://sepolia-explorer-api.metisdevops.link", // URL del explorador de bloques
+      apiUrl: "https://sepolia-explorer-api.metisdevops.link/api", // URL de la API del explorador de bloques
+    },
+  },
+  testnet: true, // Indica que es una red de prueba
+});
+
 export type ScaffoldConfig = {
   targetNetworks: readonly chains.Chain[];
   pollingInterval: number;
@@ -9,26 +33,29 @@ export type ScaffoldConfig = {
 };
 
 const scaffoldConfig = {
-  // The networks on which your DApp is live
-  targetNetworks: [chains.hardhat],
+  /**
+   * Las redes en las que tu dApp está activa
+   * En este caso solo usamos la red de Metis Sepolia.
+   */
+  targetNetworks: [metisSepolia],
 
-  // The interval at which your front-end polls the RPC servers for new data
-  // it has no effect if you only target the local network (default is 4000)
+  // El intervalo en el que tu front-end consulta los servidores RPC para obtener nuevos datos
+  // no tiene efecto si solo apuntas a la red local (el valor predeterminado es 4000)
   pollingInterval: 30000,
 
-  // This is ours Alchemy's default API key.
-  // You can get your own at https://dashboard.alchemyapi.io
-  // It's recommended to store it in an env variable:
-  // .env.local for local testing, and in the Vercel/system env config for live apps.
+  // Esta es nuestra clave API predeterminada de Alchemy.
+  // Puedes obtener la tuya en https://dashboard.alchemyapi.io
+  // Se recomienda almacenarla en una variable de entorno:
+  // .env.local para pruebas locales, y en la configuración de entorno del sistema/Vercel para aplicaciones en vivo.
   alchemyApiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF",
 
-  // This is ours WalletConnect's default project ID.
-  // You can get your own at https://cloud.walletconnect.com
-  // It's recommended to store it in an env variable:
-  // .env.local for local testing, and in the Vercel/system env config for live apps.
+  // Este es nuestro ID de proyecto predeterminado de WalletConnect.
+  // Puedes obtener el tuyo en https://cloud.walletconnect.com
+  // Se recomienda almacenarlo en una variable de entorno:
+  // .env.local para pruebas locales, y en la configuración de entorno del sistema/Vercel para aplicaciones en vivo.
   walletConnectProjectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || "3a8170812b534d0ff9d794f19a901d64",
 
-  // Only show the Burner Wallet when running on hardhat network
+  // Solo mostrar la Burner Wallet cuando se ejecuta en la red hardhat
   onlyLocalBurnerWallet: true,
 } as const satisfies ScaffoldConfig;
 
